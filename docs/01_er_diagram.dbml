@@ -1,0 +1,87 @@
+// ==========================================================
+// E&E E-Commerce Database Markup Language (DBML)
+// PostgreSQL 18 Normalized Schema & Hybrid NoSQL Catalog
+// ==========================================================
+
+Table customers {
+  customer_id integer [primary key, increment]
+  email varchar(255) [unique, not null]
+  password_hash varchar(255) [not null]
+  first_name varchar(100) [not null]
+  last_name varchar(100) [not null]
+  phone varchar(20) [not null]
+  state varchar(100) [not null]
+  created_at timestamp [default: `current_timestamp`]
+}
+
+Table products {
+  product_id integer [primary key, increment]
+  sku varchar(100) [unique, not null]
+  name varchar(200) [not null]
+  description text
+  price_ngn numeric(12,2) [not null]
+  stock_quantity integer [not null]
+  category varchar(100) [not null]
+  created_at timestamp [default: `current_timestamp`]
+}
+
+Table orders {
+  order_id integer [increment]
+  customer_id integer [not null]
+  order_date timestamp [default: `current_timestamp`]
+  status varchar(50) [not null, default: 'PENDING']
+  total_amount_ngn numeric(14,2) [not null]
+  shipping_street_address text [not null]
+  shipping_city varchar(100) [not null]
+  shipping_state varchar(100) [not null]
+  
+  indexes {
+    (order_id, shipping_state) [pk]
+  }
+}
+
+Table order_items {
+  order_item_id integer [increment]
+  order_id integer [not null]
+  product_id integer [not null]
+  quantity integer [not null]
+  unit_price_ngn numeric(12,2) [not null]
+  
+  indexes {
+    (order_item_id, order_id) [pk]
+  }
+}
+
+Table payments {
+  payment_id integer [primary key, increment]
+  order_id integer [not null]
+  payment_date timestamp [default: `current_timestamp`]
+  amount_ngn numeric(14,2) [not null]
+  payment_method varchar(50) [not null]
+  payment_reference varchar(150) [unique]
+  payment_status varchar(50) [not null]
+}
+
+Table delivery_records {
+  delivery_id integer [primary key, increment]
+  order_id integer [not null]
+  carrier_name varchar(100) [not null]
+  tracking_number varchar(150) [unique, not null]
+  dispatch_date timestamp [default: `current_timestamp`]
+  delivery_status varchar(50) [not null, default: 'DISPATCHED']
+}
+
+Table product_catalog_docs {
+  document_id integer [primary key, increment]
+  sku varchar(100) [unique, not null]
+  category varchar(100) [not null]
+  document_data jsonb [not null]
+  created_at timestamp [default: `current_timestamp`]
+}
+
+// Relationships
+Ref: orders.customer_id > customers.customer_id
+Ref: order_items.order_id > orders.order_id
+Ref: order_items.product_id > products.product_id
+Ref: payments.order_id > orders.order_id
+Ref: delivery_records.order_id > orders.order_id
