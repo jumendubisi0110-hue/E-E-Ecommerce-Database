@@ -2,12 +2,12 @@
 
 **Organization:** E&E E-Commerce (Regional Hubs: Lagos, Abuja, Rivers)  
 **Database Engine:** PostgreSQL 18  
-**Author:** [Your Name / Student ID]  
+**Author:** Umendubisi Jerry Chukwuma / 301920110 
 
 ---
 
 ## Project Overview
-This repository contains the validated database implementation, concurrency control mechanisms, hybrid JSONB product catalog, and distributed regional scaling strategy for **E&E E-Commerce**, a high-volume retail platform operating across Nigeria.
+This repository contains the validated database implementation, concurrency control mechanisms, hybrid JSONB product catalogue, and distributed regional scaling strategy for **E&E E-Commerce**, a high-volume retail platform operating across Nigeria.
 
 ## Repository Layout
 - `sql/01_schema_ddl.sql`: Core 3NF relational schema (`customers`, `products`, `orders`, `order_items`, `payments`, `delivery_records`).
